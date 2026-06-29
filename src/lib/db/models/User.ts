@@ -34,7 +34,7 @@ const UserSchema: Schema<User> = new mongoose.Schema({
       required: [true, 'Email is required'],
       unique: true,
       lowercase: true,
-      match: [/.+\@.+\..+/, 'Please use a valid email address'],
+      match: [/.+\@.+\..+/, 'Please use a valid email address'], //instea of regex if we can use zod validation that would be ideal for both backend and frontend
     },
     imageUrl: {
         type: String,
