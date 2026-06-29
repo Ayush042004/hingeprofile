@@ -39,4 +39,4 @@ const PromptLibraryModel =
   (mongoose.models.PromptLibrary as mongoose.Model<IPromptLibrary>) ||
   mongoose.model<IPromptLibrary>('PromptLibrary', PromptLibrarySchema);
 
-export default PromptLibraryModel;
+export default PromptLibraryModel;

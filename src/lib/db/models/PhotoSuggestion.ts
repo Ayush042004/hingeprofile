@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 export type PhotoSuggestion = {
   id: string;
   profileId: mongoose.Types.ObjectId;
@@ -36,4 +34,4 @@ const PhotoSuggestionSchema = new mongoose.Schema<PhotoSuggestion>({
 
 export const PhotoSuggestionModel =
   (mongoose.models.PhotoSuggestion as mongoose.Model<PhotoSuggestion>) ||
-  mongoose.model<PhotoSuggestion>('PhotoSuggestion', PhotoSuggestionSchema);
+  mongoose.model<PhotoSuggestion>('PhotoSuggestion', PhotoSuggestionSchema);

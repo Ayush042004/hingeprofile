@@ -53,4 +53,4 @@ const FeedbackSchema = new mongoose.Schema<Feedback>({
 
 export const FeedbackModel =
   (mongoose.models.Feedback as mongoose.Model<Feedback>) ||
-  mongoose.model<Feedback>('Feedback', FeedbackSchema);
+  mongoose.model<Feedback>('Feedback', FeedbackSchema);
