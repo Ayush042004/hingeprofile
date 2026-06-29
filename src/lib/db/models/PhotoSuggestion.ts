@@ -1,3 +1,5 @@
+import mongoose from "mongoose"
+
 export type PhotoSuggestion = {
   id: string;
   profileId: mongoose.Types.ObjectId;
