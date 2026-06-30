@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import dbConnect from '@/lib/db/connect';
 import InterviewSessionModel from '@/lib/db/models/InterviewSession';
+import { InterviewAgent } from '@/lib/ai/agents/InterviewAgent';
+import { CoreMessage } from 'ai';
 
 export async function POST(req: Request) {
   const authResult = await requireAuth();
@@ -37,41 +39,48 @@ export async function POST(req: Request) {
       );
     }
 
-    // 2. Add user message to the embedded messages array
-    const userMessage = {
-      role: 'user' as const,
+    // 2. Save the user message immediately
+    session.messages.push({
+      role: 'user',
       content,
       createdAt: new Date(),
-    };
-    session.messages.push(userMessage);
-
-    // 3. Increment completed questions/turns
-    session.completedQuestions = (session.completedQuestions || 0) + 1;
-
-    // 4. Generate assistant response
-    // TODO: Connect this to the actual InterviewAgent / Vercel AI SDK streaming once implemented.
-    // For now, we return a mock response and push it to the session.
-    const mockReplyText = `Thanks for sharing that! Let's talk more about your hobbies. What's something you could spend hours doing without getting bored?`;
-    
-    const assistantMessage = {
-      role: 'assistant' as const,
-      content: mockReplyText,
-      createdAt: new Date(),
-    };
-    session.messages.push(assistantMessage);
-
-    // Update current topic (example logic)
-    session.currentTopic = 'hobbies';
-
-    // Save the updated session document
+    });
     await session.save();
 
-    return NextResponse.json({
-      success: true,
-      userMessage,
-      assistantMessage,
-      completedQuestions: session.completedQuestions,
-      totalQuestions: session.totalQuestions,
+    // 3. Build the message history for the AI (CoreMessage format)
+    const coreMessages: CoreMessage[] = session.messages.map((msg) => ({
+      role: msg.role,
+      content: msg.content,
+    }));
+
+    // 4. Call the InterviewAgent — returns a StreamTextResult (not a Response)
+    const targetTopic = session.currentTopic ?? 'introduction';
+    const result = InterviewAgent(coreMessages, targetTopic);
+
+    // 5. Stream the response back to the client.
+    //    onFinish fires only after streaming completes successfully — ideal for DB writes.
+    return result.toUIMessageStreamResponse({
+      onFinish: async ({ text }) => {
+        try {
+          // Save the assistant reply and increment completedQuestions only after
+          // the AI successfully finishes. This prevents count drift on failures.
+          await InterviewSessionModel.updateOne(
+            { _id: sessionId },
+            {
+              $push: {
+                messages: {
+                  role: 'assistant',
+                  content: text,
+                  createdAt: new Date(),
+                },
+              },
+              $inc: { completedQuestions: 1 },
+            }
+          );
+        } catch (err) {
+          console.error('Failed to save assistant message after stream:', err);
+        }
+      },
     });
   } catch (error) {
     console.error('Error in interview message route:', error);
