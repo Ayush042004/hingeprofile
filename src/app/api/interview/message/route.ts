@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import dbConnect from '@/lib/db/connect';
-import { InterviewSessionModel } from '@/lib/db/models/InterviewSession';
-import { MessageModel } from '@/lib/db/models/Message';
+import InterviewSessionModel from '@/lib/db/models/InterviewSession';
 
 export async function POST(req: Request) {
   const authResult = await requireAuth();
@@ -25,8 +24,8 @@ export async function POST(req: Request) {
 
     await dbConnect();
 
-    
-    const session = await InterviewSessionModel.findOne({ _id: sessionId, userId });
+    // 1. Verify session exists and belongs to the authenticated user
+    const session = await InterviewSessionModel.findOne({ _id: sessionId, user: userId });
     if (!session) {
       return NextResponse.json({ success: false, error: 'Session not found' }, { status: 404 });
     }
@@ -38,34 +37,41 @@ export async function POST(req: Request) {
       );
     }
 
-    
-    const userMessage = await MessageModel.create({
-      sessionId,
-      role: 'user',
+    // 2. Add user message to the embedded messages array
+    const userMessage = {
+      role: 'user' as const,
       content,
       createdAt: new Date(),
-    });
+    };
+    session.messages.push(userMessage);
 
-    
-    session.turnCount = (session.turnCount || 0) + 1;
-    await session.save();
+    // 3. Increment completed questions/turns
+    session.completedQuestions = (session.completedQuestions || 0) + 1;
 
+    // 4. Generate assistant response
+    // TODO: Connect this to the actual InterviewAgent / Vercel AI SDK streaming once implemented.
+    // For now, we return a mock response and push it to the session.
+    const mockReplyText = `Thanks for sharing that! Let's talk more about your hobbies. What's something you could spend hours doing without getting bored?`;
     
-    //we have to write a mockReplyText when we will be using vercel AI SDK or any other AI SDK 
-
-    
-    const assistantMessage = await MessageModel.create({
-      sessionId,
-      role: 'assistant',
-      //content: mockReplyText,
-      topicHint: 'hobbies',
+    const assistantMessage = {
+      role: 'assistant' as const,
+      content: mockReplyText,
       createdAt: new Date(),
-    });
+    };
+    session.messages.push(assistantMessage);
+
+    // Update current topic (example logic)
+    session.currentTopic = 'hobbies';
+
+    // Save the updated session document
+    await session.save();
 
     return NextResponse.json({
       success: true,
       userMessage,
       assistantMessage,
+      completedQuestions: session.completedQuestions,
+      totalQuestions: session.totalQuestions,
     });
   } catch (error) {
     console.error('Error in interview message route:', error);

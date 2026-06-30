@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import dbConnect from '@/lib/db/connect';
-import { InterviewSessionModel } from '@/lib/db/models/InterviewSession';
+import InterviewSessionModel from '@/lib/db/models/InterviewSession';
 
 export async function POST(req: Request) {
   const authResult = await requireAuth();
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     await dbConnect();
 
     
-    const session = await InterviewSessionModel.findOne({ _id: sessionId, userId });
+    const session = await InterviewSessionModel.findOne({ _id: sessionId, user: userId });
 
     if (!session) {
       return NextResponse.json({ success: false, error: 'Session not found' }, { status: 404 });

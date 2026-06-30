@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import {getCurrentUserId} from "@/lib/auth"
 import { requireAuth } from '@/lib/auth';
 import dbConnect from "@/lib/db/connect"
-import  {InterviewSessionModel} from "@/lib/db/models/InterviewSession"
+import InterviewSessionModel from "@/lib/db/models/InterviewSession";
 
 
 export async function POST() {
@@ -12,20 +12,21 @@ export async function POST() {
 
   // checking of user authentication
   if (!userId) {
-    return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
   }
 
-  try{
+  try {
     await dbConnect()
 
     const session = await InterviewSessionModel.create({
-      userId,
+      user: userId,
       status: "active",
-      turnCount: 0,
+      completedQuestions: 0,
       startedAt: new Date()
     })
 
-    return NextResponse.json({success:true,sessionId: session._id,},{status:201})
+    return NextResponse.json({ success: true, sessionId: session._id }, { status: 201 })
+
 
 
 
