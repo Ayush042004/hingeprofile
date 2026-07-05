@@ -2,7 +2,7 @@ import dbConnect from "./connect";
 import { PromptLibraryModel } from "./models/PromptLibrary";
  
 /**
- * Full Hinge-style prompt library.
+ * Full merged Hinge-style prompt library.
  * - `category` groups prompts the same way Hinge's own prompt picker does.
  * - `requiredTraits` maps to PersonalityProfile trait fields (humor, lifestyle,
  *   hobbies, communication, relationships, career, travel, food, values).
@@ -549,7 +549,7 @@ const prompts = [
     tags: ["game", "conversation-starter"],
     priority: 10,
     tone: "playful",
-    active: false, // duplicate — see matching entry in another category
+    active: false, // ye duplicate hai
   },
  
   {
@@ -586,7 +586,7 @@ const prompts = [
     tags: ["adventure"],
     priority: 7,
     tone: "chaotic",
-    active: false, // duplicate — see matching entry in another category
+    active: false, // ye ek aur duplicate hai
   },
  
   {
@@ -744,7 +744,7 @@ const prompts = [
     tags: ["love-language", "dating"],
     priority: 9,
     tone: "thoughtful",
-    active: false, // duplicate — see matching entry in another category
+    active: false, // ye bhi duplicate hai
   },
  
   {
@@ -965,6 +965,557 @@ const prompts = [
     tags: ["community", "purpose"],
     priority: 3,
     tone: "emotional",
+  },
+
+  // yaha se naye waale prompt add hue hain
+
+  {
+    prompt: "A quick rant about",
+    category: "humor",
+    requiredTraits: ["humor", "communication"],
+    tags: ["humor"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "A random fact I love is",
+    category: "humor",
+    requiredTraits: ["humor", "communication"],
+    tags: ["humor"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "An award my family would give me",
+    category: "humor",
+    requiredTraits: ["humor", "communication"],
+    tags: ["humor"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "Do you agree or disagree that",
+    category: "humor",
+    requiredTraits: ["humor", "communication"],
+    tags: ["humor"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "Don't hate me if I",
+    category: "humor",
+    requiredTraits: ["humor", "communication"],
+    tags: ["humor"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "I'll give you the set up, you guess the punchline",
+    category: "humor",
+    requiredTraits: ["humor", "communication"],
+    tags: ["humor"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "If loving this is wrong, I don't want to be right",
+    category: "humor",
+    requiredTraits: ["humor", "communication"],
+    tags: ["humor"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "My best Dad Joke",
+    category: "humor",
+    requiredTraits: ["humor", "communication"],
+    tags: ["humor"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "My best celebrity impression",
+    category: "humor",
+    requiredTraits: ["humor", "communication"],
+    tags: ["humor"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "Try to guess this about me",
+    category: "humor",
+    requiredTraits: ["humor", "communication"],
+    tags: ["humor"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "What if I told you that",
+    category: "humor",
+    requiredTraits: ["humor", "communication"],
+    tags: ["humor"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "You’d never know it, but I",
+    category: "humor",
+    requiredTraits: ["humor", "communication"],
+    tags: ["humor"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "All I ask is that you",
+    category: "fun",
+    requiredTraits: ["communication"],
+    tags: ["conversation"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "I could stay up all night talking about",
+    category: "fun",
+    requiredTraits: ["communication"],
+    tags: ["conversation"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "I wish more people knew",
+    category: "fun",
+    requiredTraits: ["communication"],
+    tags: ["conversation"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "The one thing I'd love to know about you is",
+    category: "fun",
+    requiredTraits: ["communication"],
+    tags: ["conversation"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "The one thing you should know about me is",
+    category: "fun",
+    requiredTraits: ["communication"],
+    tags: ["conversation"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "You should leave a comment if",
+    category: "fun",
+    requiredTraits: ["communication"],
+    tags: ["conversation"],
+    priority: 8,
+    tone: "playful",
+  },
+
+  {
+    prompt: "I feel proudest of who I am when",
+    category: "lifestyle",
+    requiredTraits: ["lifestyle", "communication"],
+    tags: ["personality"],
+    priority: 7,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "I'm in my element when",
+    category: "lifestyle",
+    requiredTraits: ["lifestyle", "communication"],
+    tags: ["personality"],
+    priority: 7,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "My happy place",
+    category: "lifestyle",
+    requiredTraits: ["lifestyle", "communication"],
+    tags: ["personality"],
+    priority: 7,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "My last journal entry was about",
+    category: "lifestyle",
+    requiredTraits: ["lifestyle", "communication"],
+    tags: ["personality"],
+    priority: 7,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "My self-care routine is",
+    category: "lifestyle",
+    requiredTraits: ["lifestyle", "communication"],
+    tags: ["personality"],
+    priority: 7,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "My therapist would say I",
+    category: "lifestyle",
+    requiredTraits: ["lifestyle", "communication"],
+    tags: ["personality"],
+    priority: 7,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "One thing I'll never do again",
+    category: "lifestyle",
+    requiredTraits: ["lifestyle", "communication"],
+    tags: ["personality"],
+    priority: 7,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "Something my pet thinks about me",
+    category: "lifestyle",
+    requiredTraits: ["lifestyle", "communication"],
+    tags: ["personality"],
+    priority: 7,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "Therapy recently taught me",
+    category: "lifestyle",
+    requiredTraits: ["lifestyle", "communication"],
+    tags: ["personality"],
+    priority: 7,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "Where I go when I want to feel a little more like myself",
+    category: "lifestyle",
+    requiredTraits: ["lifestyle", "communication"],
+    tags: ["personality"],
+    priority: 7,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "It’s not a vacation unless",
+    category: "lifestyle",
+    requiredTraits: ["lifestyle", "hobbies"],
+    tags: ["lifestyle"],
+    priority: 7,
+    tone: "playful",
+  },
+
+  {
+    prompt: "What I order for the table",
+    category: "lifestyle",
+    requiredTraits: ["lifestyle", "hobbies"],
+    tags: ["lifestyle"],
+    priority: 7,
+    tone: "playful",
+  },
+
+  {
+    prompt: "I feel most supported when",
+    category: "relationship",
+    requiredTraits: ["relationships", "communication"],
+    tags: ["relationships"],
+    priority: 9,
+    tone: "emotional",
+  },
+
+  {
+    prompt: "I'll brag about you to my friends if",
+    category: "relationship",
+    requiredTraits: ["relationships", "communication"],
+    tags: ["relationships"],
+    priority: 9,
+    tone: "emotional",
+  },
+
+  {
+    prompt: "I'll fall for you if",
+    category: "relationship",
+    requiredTraits: ["relationships", "communication"],
+    tags: ["relationships"],
+    priority: 9,
+    tone: "emotional",
+  },
+
+  {
+    prompt: "Let's make sure we're on the same page about",
+    category: "relationship",
+    requiredTraits: ["relationships", "communication"],
+    tags: ["relationships"],
+    priority: 9,
+    tone: "emotional",
+  },
+
+  {
+    prompt: "My BFF's take on why you should date me",
+    category: "relationship",
+    requiredTraits: ["relationships", "communication"],
+    tags: ["relationships"],
+    priority: 9,
+    tone: "emotional",
+  },
+
+  {
+    prompt: "Something that's non-negotiable for me is",
+    category: "relationship",
+    requiredTraits: ["relationships", "communication"],
+    tags: ["relationships"],
+    priority: 9,
+    tone: "emotional",
+  },
+
+  {
+    prompt: "The best way to ask me out is by",
+    category: "relationship",
+    requiredTraits: ["relationships", "communication"],
+    tags: ["relationships"],
+    priority: 9,
+    tone: "emotional",
+  },
+
+  {
+    prompt: "We'll get along if",
+    category: "relationship",
+    requiredTraits: ["relationships", "communication"],
+    tags: ["relationships"],
+    priority: 9,
+    tone: "emotional",
+  },
+
+  {
+    prompt: "We're the same type of weird if",
+    category: "relationship",
+    requiredTraits: ["relationships", "communication"],
+    tags: ["relationships"],
+    priority: 9,
+    tone: "emotional",
+  },
+
+  {
+    prompt: "You should *not* go out with me if",
+    category: "relationship",
+    requiredTraits: ["relationships", "communication"],
+    tags: ["relationships"],
+    priority: 9,
+    tone: "emotional",
+  },
+
+  {
+    prompt: "In my friend group, I’m the one who",
+    category: "relationship",
+    requiredTraits: ["relationships", "values"],
+    tags: ["friends-family"],
+    priority: 6,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "My chosen family is the best at",
+    category: "relationship",
+    requiredTraits: ["relationships", "values"],
+    tags: ["friends-family"],
+    priority: 6,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "The kindest thing someone has ever done for me",
+    category: "relationship",
+    requiredTraits: ["relationships", "values"],
+    tags: ["friends-family"],
+    priority: 6,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "Apparently, my life's soundtrack is",
+    category: "lifestyle",
+    requiredTraits: ["hobbies", "lifestyle"],
+    tags: ["music"],
+    priority: 7,
+    tone: "playful",
+  },
+
+  {
+    prompt: "Before we meet, you should listen to",
+    category: "lifestyle",
+    requiredTraits: ["hobbies", "lifestyle"],
+    tags: ["music"],
+    priority: 7,
+    tone: "playful",
+  },
+
+  {
+    prompt: "Guess the song",
+    category: "lifestyle",
+    requiredTraits: ["hobbies", "lifestyle"],
+    tags: ["music"],
+    priority: 7,
+    tone: "playful",
+  },
+
+  {
+    prompt: "Proof I have musical talent",
+    category: "lifestyle",
+    requiredTraits: ["hobbies", "lifestyle"],
+    tags: ["music"],
+    priority: 7,
+    tone: "playful",
+  },
+
+  {
+    prompt: "Best travel story",
+    category: "lifestyle",
+    requiredTraits: ["travel", "hobbies"],
+    tags: ["travel"],
+    priority: 7,
+    tone: "playful",
+  },
+
+  {
+    prompt: "Biggest risk I've taken",
+    category: "lifestyle",
+    requiredTraits: ["travel", "hobbies"],
+    tags: ["travel"],
+    priority: 7,
+    tone: "playful",
+  },
+
+  {
+    prompt: "Give me travel tips for",
+    category: "lifestyle",
+    requiredTraits: ["travel", "hobbies"],
+    tags: ["travel"],
+    priority: 7,
+    tone: "playful",
+  },
+
+  {
+    prompt: "Gender euphoria looks like",
+    category: "values",
+    requiredTraits: ["values", "relationships"],
+    tags: ["identity-community"],
+    priority: 6,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "How to pronounce my name",
+    category: "values",
+    requiredTraits: ["values", "relationships"],
+    tags: ["identity-community"],
+    priority: 6,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "I connect to my community by",
+    category: "values",
+    requiredTraits: ["values", "relationships"],
+    tags: ["identity-community"],
+    priority: 6,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "It feels affirming when others",
+    category: "values",
+    requiredTraits: ["values", "relationships"],
+    tags: ["identity-community"],
+    priority: 6,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "My favorite LGBTQIA+ book is",
+    category: "values",
+    requiredTraits: ["values", "relationships"],
+    tags: ["identity-community"],
+    priority: 6,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "My favorite LGBTQIA+-owned places",
+    category: "values",
+    requiredTraits: ["values", "relationships"],
+    tags: ["identity-community"],
+    priority: 6,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "My favorite off-brand LGBTQIA+ icon is",
+    category: "values",
+    requiredTraits: ["values", "relationships"],
+    tags: ["identity-community"],
+    priority: 6,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "The first time I knew I was gay was",
+    category: "values",
+    requiredTraits: ["values", "relationships"],
+    tags: ["identity-community"],
+    priority: 6,
+    tone: "thoughtful",
+  },
+
+  {
+    prompt: "My favorite line from a movie",
+    category: "fun",
+    requiredTraits: ["hobbies", "communication"],
+    tags: ["creative"],
+    priority: 6,
+    tone: "playful",
+  },
+
+  {
+    prompt: "Saying \"Hi!\" in as many languages I know",
+    category: "fun",
+    requiredTraits: ["hobbies", "communication"],
+    tags: ["creative"],
+    priority: 6,
+    tone: "playful",
+  },
+
+  {
+    prompt: "I wish I could tell the younger version of myself",
+    category: "values",
+    requiredTraits: ["career", "values"],
+    tags: ["goals-growth"],
+    priority: 7,
+    tone: "thoughtful",
   },
 ];
 async function seedPrompts() {
