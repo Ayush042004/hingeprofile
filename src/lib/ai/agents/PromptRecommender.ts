@@ -27,7 +27,7 @@ export async function recommendPrompts(
       schema: RecommendationSchema,
       system: promptRecommendSystemPrompt,
       temperature: 0.4,
-      maxOutputTokens: 300,
+      maxOutputTokens: 8000,
       prompt: `
 Candidate Personality
 

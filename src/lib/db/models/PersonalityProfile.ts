@@ -271,10 +271,6 @@ const PersonalityProfileSchema = new Schema<PersonalityProfile>(
   }
 );
 
-PersonalityProfileSchema.index({
-  user: 1,
-});
-
 const PersonalityProfile =
   mongoose.models.PersonalityProfile ||
   mongoose.model<PersonalityProfile>(

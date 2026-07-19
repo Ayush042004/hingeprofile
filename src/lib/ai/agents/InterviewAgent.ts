@@ -1,7 +1,7 @@
 import {
   streamText,
   generateObject,
-  type CoreMessage,
+  type ModelMessage,
 } from "ai";
 import { z } from "zod";
 
@@ -14,7 +14,7 @@ const OpeningQuestionSchema = z.object({
 });
 
 interface ConductInterviewParams {
-  messages: CoreMessage[];
+  messages: ModelMessage[];
   nextTopic: string | null;
 }
 
@@ -22,33 +22,29 @@ export async function conductInterview({
   messages,
   nextTopic,
 }: ConductInterviewParams) {
-  const systemMessages: CoreMessage[] = [
-    {
-      role: "system",
-      content: interviewSystemPrompt,
-    },
-    {
-      role: "system",
-      content: nextTopic
-        ? `Current interview state:
+  const systemInstruction = `${interviewSystemPrompt}
+
+${
+  nextTopic
+    ? `Current interview state:
 - Ask ONLY about this topic: ${JSON.stringify(nextTopic)}
 - Ask exactly ONE question.
 - Wait for the candidate's answer before asking another question.`
-        : `Current interview state:
+    : `Current interview state:
 - All interview topics are complete.
 - Do NOT ask another question.
 - Thank the candidate.
 - End the interview politely.
-- Tell them feedback will be generated next.`,
-    },
-  ];
+- Tell them feedback will be generated next.`
+}`;
 
   try {
     return streamText({
       model: chatModel,
-      messages: [...systemMessages, ...messages],
+      system: systemInstruction,
+      messages: messages,
       temperature: 0.4,
-      maxOutputTokens: 200,
+      maxOutputTokens: 1000,
     });
   } catch (error) {
     console.error("Interview generation failed:", error);
@@ -69,7 +65,7 @@ export async function getOpeningQuestion() {
 - The question should be about personality, communication, or humor.
 - Do not ask follow-up questions.`,
     temperature: 0.4,
-    maxOutputTokens: 150,
+    maxOutputTokens: 1000,
   });
 
   return result.object;

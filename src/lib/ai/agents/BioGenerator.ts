@@ -8,7 +8,7 @@ import { ExtractedPersonality } from "./PersonalityExtractor";
 const BioSchema = z.object({
   bio: z
     .string()
-    .max(150)
+    .max(300)
     .describe("A witty Hinge bio under 150 characters."),
 });
 

@@ -23,10 +23,10 @@ const PhotoSuggestionSchema = z
     z.object({
       order: z.number().int().min(1).max(6),
       photoType: PhotoTypeEnum,
-      title: z.string().max(50),
-      description: z.string().max(200),
-      reason: z.string().max(200),
-      caption: z.string().max(80),
+      title: z.string().max(150),
+      description: z.string().max(1000),
+      reason: z.string().max(1000),
+      caption: z.string().max(200),
       importance: z.number().int().min(1).max(10),
       required: z.boolean(),
     })
@@ -44,7 +44,7 @@ export async function advisePhotos(
       schema: PhotoSuggestionSchema,
       system: photoSystemPrompt,
       temperature: 0.8,
-      maxOutputTokens: 1500,
+      maxOutputTokens: 8192,
       prompt: `
 Candidate Personality
 

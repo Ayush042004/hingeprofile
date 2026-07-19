@@ -1,4 +1,4 @@
-import type { CoreMessage } from "ai";
+import type { ModelMessage } from "ai";
 
 import { extractPersonality } from "./PersonalityExtractor";
 import { generateBio } from "./BioGenerator";
@@ -15,7 +15,7 @@ interface PromptOption {
 }
 
 export async function composeProfile(
-  transcript: CoreMessage[],
+  transcript: ModelMessage[],
   allPrompts: PromptOption[],
   style = "Balanced"
 ) {

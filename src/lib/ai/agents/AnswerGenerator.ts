@@ -8,7 +8,7 @@ import { ExtractedPersonality } from "./PersonalityExtractor";
 const AnswerSchema = z.array(
   z.object({
     promptId: z.string(),
-    answer: z.string().max(180),
+    answer: z.string().max(500),
   })
 );
 
@@ -29,7 +29,7 @@ export async function generatePromptAnswers(
     schema: AnswerSchema,
     system: promptAnswerSystemPrompt,
     temperature: 0.9,
-    maxOutputTokens: 1200,
+    maxOutputTokens: 8192,
     prompt: `
 Candidate Personality
 

@@ -1,4 +1,4 @@
-import { generateObject, type CoreMessage } from "ai";
+import { generateObject, type ModelMessage } from "ai";
 import { z } from "zod";
 
 import { smartModel } from "../client";
@@ -6,22 +6,22 @@ import { extractionSystemPrompt } from "../prompts/extraction";
 
 const AiTraitNumber = z.object({
   value: z.number(),
-  confidence: z.number().min(0).max(1),
+  confidence: z.number().min(0).max(100),
 });
 
 const AiTraitString = z.object({
   value: z.string(),
-  confidence: z.number().min(0).max(1),
+  confidence: z.number().min(0).max(100),
 });
 
 const AiTraitBool = z.object({
   value: z.boolean(),
-  confidence: z.number().min(0).max(1),
+  confidence: z.number().min(0).max(100),
 });
 
 const AiTraitStrArr = z.object({
   value: z.array(z.string()),
-  confidence: z.number().min(0).max(1),
+  confidence: z.number().min(0).max(100),
 });
 
 export const PersonalitySchema = z.object({
@@ -82,12 +82,12 @@ export const PersonalitySchema = z.object({
 export type ExtractedPersonality = z.infer<typeof PersonalitySchema>;
 
 export async function extractPersonality(
-  transcript: CoreMessage[]
+  transcript: ModelMessage[]
 ): Promise<ExtractedPersonality> {
   try {
     const transcriptText = transcript
       .filter(
-        (m): m is CoreMessage & { content: string } =>
+        (m): m is ModelMessage & { content: string } =>
           typeof m.content === "string"
       )
       .map((m) => `${m.role.toUpperCase()}: ${m.content}`)
@@ -103,7 +103,7 @@ Interview Transcript:
 
 ${transcriptText}`,
       temperature: 0,
-      maxOutputTokens: 1500,
+      maxOutputTokens: 8192,
     });
 
     return object;

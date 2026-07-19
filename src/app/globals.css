@@ -1,26 +1,347 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F0F0F0;
+  --foreground: #121212;
+  --primary-red: #D02020;
+  --primary-blue: #1040C0;
+  --primary-yellow: #F0C020;
+  --border: #121212;
+  --muted: #888888;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary-red: var(--primary-red);
+  --color-primary-blue: var(--primary-blue);
+  --color-primary-yellow: var(--primary-yellow);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-outfit), 'Outfit', system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Bauhaus Core Base Styles ────────────────────────────────────────── */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Dot grid background pattern ────────────────────────────────────── */
+
+.bg-dot-pattern {
+  background-image: radial-gradient(rgba(18, 18, 18, 0.15) 1.5px, transparent 1.5px);
+  background-size: 20px 20px;
+}
+
+.bg-dot-pattern-light {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.25) 1.5px, transparent 1.5px);
+  background-size: 20px 20px;
+}
+
+/* ─── Mechanical / Snappy Transitions ────────────────────────────────── */
+
+.transition-bauhaus {
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── Thick Borders ─────────────────────────────────────────────────── */
+
+.bauhaus-border {
+  border: 4px solid var(--border);
+}
+
+.bauhaus-border-sm {
+  border: 2px solid var(--border);
+}
+
+/* ─── Hard Offset Shadows ───────────────────────────────────────────── */
+
+.bauhaus-shadow-sm {
+  box-shadow: 4px 4px 0px 0px var(--border);
+}
+
+.bauhaus-shadow-md {
+  box-shadow: 6px 6px 0px 0px var(--border);
+}
+
+.bauhaus-shadow-lg {
+  box-shadow: 8px 8px 0px 0px var(--border);
+}
+
+/* Active press button simulation */
+.bauhaus-press {
+  transition: all 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bauhaus-press:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 0px 0px 0px 0px var(--border);
+}
+
+.bauhaus-press-sm:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--border);
+}
+
+/* ─── Custom Layouts & Components ───────────────────────────────────── */
+
+/* Hero Banner composition */
+.bauhaus-composition {
+  position: relative;
+  background-color: var(--primary-blue);
+  border: 4px solid var(--border);
+  box-shadow: 8px 8px 0px 0px var(--border);
+}
+
+/* Grayscale filters */
+.bauhaus-grayscale {
+  filter: grayscale(100%);
+  transition: filter 0.25s ease-out;
+}
+
+.bauhaus-grayscale:hover {
+  filter: grayscale(0%);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+  border-left: 2px solid var(--border);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border: 2px solid var(--background);
+}
+
+/* ─── Legacy classes mapped to Bauhaus for compatibility ──────────────── */
+
+.glass {
+  background: #ffffff;
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
+}
+
+.glass-strong {
+  background: #ffffff;
+  border: 4px solid var(--border);
+  box-shadow: 6px 6px 0px 0px var(--border);
+}
+
+.card-glass {
+  background: #ffffff;
+  border: 4px solid var(--border);
+  box-shadow: 6px 6px 0px 0px var(--border);
+  padding: 1.5rem;
+}
+
+.card {
+  background: #ffffff;
+  border: 4px solid var(--border);
+  box-shadow: 6px 6px 0px 0px var(--border);
+  padding: 1.5rem;
+}
+
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  background-color: var(--primary-yellow);
+  border: 2px solid var(--border);
+  box-shadow: 3px 3px 0px 0px var(--border);
+}
+
+/* Buttons mapping */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--primary-red);
+  color: #ffffff;
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+.btn-primary:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--border);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--primary-blue);
+  color: #ffffff;
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+.btn-secondary:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--border);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: transparent;
+  color: var(--foreground);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+.btn-ghost:hover {
+  background: rgba(18, 18, 18, 0.05);
+  border-color: var(--border);
+}
+
+/* Chat bubble styling */
+.bubble-ai {
+  background: #ffffff;
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  padding: 0.75rem 1rem;
+  max-width: 80%;
+  border-radius: 0px;
+  line-height: 1.5;
+}
+
+.bubble-user {
+  background: var(--primary-blue);
+  color: #ffffff;
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  padding: 0.75rem 1rem;
+  max-width: 80%;
+  border-radius: 0px;
+  line-height: 1.5;
+}
+
+/* Progress bar */
+.progress-track {
+  width: 100%;
+  height: 16px;
+  background: #ffffff;
+  border: 2px solid var(--border);
+  border-radius: 0px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary-red);
+  border-right: 2px solid var(--border);
+  transition: width 0.4s ease-out;
+}
+
+/* Hinge preview card */
+.hinge-card {
+  background: #ffffff;
+  border: 4px solid var(--border);
+  box-shadow: 8px 8px 0px 0px var(--border);
+  width: 100%;
+  max-width: 380px;
+}
+
+.hinge-prompt {
+  padding: 1.25rem;
+  border-bottom: 2px solid var(--border);
+  background: #ffffff;
+}
+
+.hinge-prompt-text {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.hinge-prompt-answer {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--foreground);
+}
+
+/* Photo slot */
+.photo-slot {
+  position: relative;
+  background: #ffffff;
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  aspect-ratio: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.25rem;
+  transition: all 0.15s ease;
+}
+
+.photo-slot:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--border);
+}
+
+.photo-slot-number {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-color: var(--primary-yellow);
+  color: var(--foreground);
+  font-weight: 900;
+  font-size: 1rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
 }
