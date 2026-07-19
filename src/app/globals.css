@@ -159,14 +159,336 @@ body {
 /* ==========================================================
    CLERK NEO-BRUTALIST GLOBAL CSS OVERRIDES
    ========================================================== */
-.cl-card:not(.cl-userButtonPopoverCard):not([class*="userButtonPopover"]):not(.cl-popoverBox),
-.cl-cardBox:not(.cl-userButtonPopoverCard):not([class*="userButtonPopover"]):not(.cl-popoverBox),
-.cl-rootBox:not([class*="userButtonPopover"]):not(.cl-popoverBox) {
+
+/* Transparent background ONLY for the primary Clerk widget inside AuthShell page wrapper */
+.auth-shell-widget > .cl-rootBox > .cl-cardBox > .cl-card,
+.auth-shell-widget > .cl-rootBox > .cl-cardBox,
+.auth-shell-widget > .cl-rootBox {
   background: transparent !important;
   box-shadow: none !important;
   border: none !important;
   padding: 0 !important;
   margin: 0 !important;
+}
+
+/* ==========================================================
+   CLERK MODALS, VERIFICATION CARDS & SUB-DIALOGS NEO-BRUTALIST UI
+   ========================================================== */
+
+/* Outer Modal Backdrop Overlay */
+.cl-modalBackdrop,
+.cl-userProfile-modal,
+.cl-userProfileModalOuterBox,
+[class*="modalBackdrop"],
+[class*="userProfileModalOuterBox"] {
+  background-color: rgba(12, 11, 9, 0.8) !important;
+  backdrop-filter: blur(6px) !important;
+  z-index: 99999 !important;
+  position: fixed !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1rem !important;
+}
+
+/* Solid Neo-Brutalist Card for all Clerk Modals & Verification Cards */
+.cl-card:not(.auth-shell-widget > .cl-rootBox > .cl-cardBox > .cl-card):not(.cl-userButtonPopoverCard),
+.cl-cardBox:not(.auth-shell-widget > .cl-rootBox > .cl-cardBox):not(.cl-userButtonPopoverCard),
+.cl-modalCard,
+.cl-userProfile-card,
+.cl-userProfileModalCard,
+[class*="modalCard"],
+[class*="userProfileModalCard"] {
+  background-color: #FFFDF8 !important;
+  border: 4px solid #0c0b09 !important;
+  box-shadow: 10px 10px 0px 0px #0c0b09 !important;
+  border-radius: 1.5rem !important;
+  overflow: hidden !important;
+  z-index: 100000 !important;
+  color: #0c0b09 !important;
+}
+
+.cl-userProfile-page,
+.cl-pageScrollBox,
+.cl-page,
+.cl-scrollBox,
+.cl-userProfile-content,
+[class*="pageScrollBox"],
+[class*="userProfile-page"],
+[class*="userProfileContent"],
+[class*="scrollBox"],
+[class*="mainBox"] {
+  background-color: #FFFDF8 !important;
+}
+
+.cl-headerTitle,
+[class*="headerTitle"] {
+  color: #0c0b09 !important;
+  font-family: var(--font-outfit), sans-serif !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+}
+
+.cl-headerSubtitle,
+[class*="headerSubtitle"] {
+  color: rgba(12, 11, 9, 0.75) !important;
+}
+
+.cl-userProfile-navbar,
+.cl-navbar,
+[class*="userProfile-navbar"] {
+  background-color: #F3EEE2 !important;
+  border-right: 3px solid #0c0b09 !important;
+  padding: 1.25rem 0.75rem !important;
+}
+
+.cl-navbarButton,
+[class*="navbarButton"] {
+  border: 2px solid transparent !important;
+  border-radius: 0.75rem !important;
+  padding: 0.65rem 1rem !important;
+  font-family: var(--font-outfit), sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 0.8rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: #0c0b09 !important;
+  transition: all 0.15s ease !important;
+}
+.cl-navbarButton:hover,
+[class*="navbarButton"]:hover {
+  background-color: #C6FF4D !important;
+  border-color: #0c0b09 !important;
+  box-shadow: 2px 2px 0px #0c0b09 !important;
+}
+
+.cl-profilePage__section,
+.cl-userProfile-section,
+[class*="profilePage__section"],
+[class*="userProfile-section"] {
+  background-color: #FFFDF8 !important;
+  border: 3px solid #0c0b09 !important;
+  box-shadow: 4px 4px 0px 0px #0c0b09 !important;
+  border-radius: 1.25rem !important;
+  padding: 1.25rem !important;
+  margin-bottom: 1.25rem !important;
+}
+
+.cl-profileSectionTitle,
+.cl-userProfile-sectionTitle,
+[class*="profileSectionTitle"] {
+  font-family: var(--font-outfit), sans-serif !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: #0c0b09 !important;
+  border-bottom: 2px solid rgba(12, 11, 9, 0.15) !important;
+  padding-bottom: 0.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.cl-profileSectionPrimaryButton,
+.cl-userProfile-sectionPrimaryButton,
+[class*="profileSectionPrimaryButton"] {
+  background-color: #C6FF4D !important;
+  color: #0c0b09 !important;
+  border: 2px solid #0c0b09 !important;
+  box-shadow: 3px 3px 0px #0c0b09 !important;
+  border-radius: 0.75rem !important;
+  font-family: var(--font-outfit), sans-serif !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.75rem !important;
+  padding: 0.5rem 1rem !important;
+  transition: all 0.15s ease !important;
+}
+.cl-profileSectionPrimaryButton:hover,
+.cl-userProfile-sectionPrimaryButton:hover,
+[class*="profileSectionPrimaryButton"]:hover {
+  background-color: #FFFDF8 !important;
+  box-shadow: 5px 5px 0px #0c0b09 !important;
+  transform: translate(-1px, -1px) !important;
+}
+
+.cl-modalCloseButton,
+[class*="modalCloseButton"] {
+  border: 2px solid #0c0b09 !important;
+  background-color: #FFFDF8 !important;
+  box-shadow: 2px 2px 0px #0c0b09 !important;
+  border-radius: 0.75rem !important;
+  padding: 0.4rem !important;
+  color: #0c0b09 !important;
+  transition: all 0.15s ease !important;
+}
+.cl-modalCloseButton:hover,
+[class*="modalCloseButton"]:hover {
+  background-color: #C6FF4D !important;
+  box-shadow: 4px 4px 0px #0c0b09 !important;
+  transform: translate(-1px, -1px) !important;
+}
+
+/* ==========================================================
+   CLERK FORM FIELDS, PASSWORD TOGGLES & INPUT CONTROLS
+   ========================================================== */
+
+/* Form field wrapper */
+.cl-formFieldRow,
+.cl-formField,
+[class*="formFieldRow"],
+[class*="formField"] {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  margin-bottom: 0.75rem !important;
+  position: relative !important;
+}
+
+.cl-formFieldLabel,
+[class*="formFieldLabel"] {
+  font-family: var(--font-outfit), sans-serif !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.05em !important;
+  color: #0c0b09 !important;
+  margin-bottom: 0.35rem !important;
+}
+
+/* Password Input Group Container */
+.cl-formFieldInputShowPasswordContainer,
+[class*="formFieldInputShowPasswordContainer"],
+[class*="formFieldInputGroup"] {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Eye Toggle Button inside Password Input */
+.cl-formFieldInputShowPasswordButton,
+[class*="formFieldInputShowPasswordButton"] {
+  position: absolute !important;
+  right: 0.75rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0.25rem !important;
+  margin: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  color: #0c0b09 !important;
+  cursor: pointer !important;
+  z-index: 10 !important;
+}
+.cl-formFieldInputShowPasswordButton:hover,
+[class*="formFieldInputShowPasswordButton"]:hover {
+  color: #FF5C00 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Actual Input Controls Only */
+input.cl-formFieldInput,
+input.cl-input,
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  display: block !important;
+  width: 100% !important;
+  height: 3.25rem !important;
+  min-height: 3rem !important;
+  border: 3px solid #0c0b09 !important;
+  background-color: #FFFDF8 !important;
+  box-shadow: 3px 3px 0px 0px #0c0b09 !important;
+  border-radius: 0.875rem !important;
+  padding: 0.75rem 2.5rem 0.75rem 1rem !important;
+  font-family: var(--font-sans), sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  color: #0c0b09 !important;
+  outline: none !important;
+  transition: all 0.15s ease !important;
+}
+
+input.cl-formFieldInput:focus,
+input.cl-input:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+  border-color: #0c0b09 !important;
+  box-shadow: 5px 5px 0px 0px #C6FF4D !important;
+  background-color: #ffffff !important;
+}
+
+/* ==========================================================
+   BLACK OTP / VERIFICATION CODE INPUT BOXES WITH LIME TEXT
+   ========================================================== */
+
+.cl-otpCodeField,
+.cl-otpCodeFieldInputs,
+[class*="otpCodeField"],
+[class*="otpCodeFieldInputs"] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.35rem !important;
+  margin: 1.25rem 0 !important;
+  width: 100% !important;
+}
+
+.cl-otpCodeFieldInput,
+[class*="otpCodeFieldInput"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 2.35rem !important;
+  height: 2.85rem !important;
+  min-width: 2rem !important;
+  min-height: 2.5rem !important;
+  border: 3px solid #0c0b09 !important;
+  background-color: #0c0b09 !important;
+  color: #C6FF4D !important;
+  box-shadow: 3px 3px 0px 0px #C6FF4D !important;
+  border-radius: 0.75rem !important;
+  font-family: var(--font-outfit), sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 1.25rem !important;
+  text-align: center !important;
+  transition: all 0.15s ease !important;
+  outline: none !important;
+}
+
+@media (min-width: 640px) {
+  .cl-otpCodeField,
+  .cl-otpCodeFieldInputs,
+  [class*="otpCodeField"],
+  [class*="otpCodeFieldInputs"] {
+    gap: 0.5rem !important;
+  }
+  .cl-otpCodeFieldInput,
+  [class*="otpCodeFieldInput"] {
+    width: 2.75rem !important;
+    height: 3.25rem !important;
+    font-size: 1.4rem !important;
+  }
+}
+
+.cl-otpCodeFieldInput:focus,
+[class*="otpCodeFieldInput"]:focus {
+  border-color: #C6FF4D !important;
+  box-shadow: 5px 5px 0px 0px #C6FF4D !important;
+  background-color: #0c0b09 !important;
+  color: #C6FF4D !important;
+  transform: scale(1.06) !important;
 }
 
 /* Completely strip out any dark/black footer background */
