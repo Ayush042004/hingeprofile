@@ -1,5 +1,21 @@
 'use client';
 
+import {
+  User,
+  Plane,
+  Palette,
+  Users,
+  Dog,
+  Utensils,
+  Trophy,
+  Home,
+  Trees,
+  Camera,
+  MessageSquareQuote,
+  Star,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+
 interface PhotoSlotProps {
   order: number;
   photoType: string;
@@ -10,18 +26,19 @@ interface PhotoSlotProps {
   required: boolean;
 }
 
-const TYPE_EMOJI: Record<string, string> = {
-  Portrait: '🤳',
-  Travel: '✈️',
-  Hobby: '🎨',
-  Friends: '👯',
-  Pet: '🐕',
-  Food: '🍽️',
-  Sports: '⚽',
-  Lifestyle: '🏡',
-  Nature: '🌿',
-  Other: '📷',
+const TYPE_ICONS: Record<string, LucideIcon> = {
+  Portrait: User,
+  Travel: Plane,
+  Hobby: Palette,
+  Friends: Users,
+  Pet: Dog,
+  Food: Utensils,
+  Sports: Trophy,
+  Lifestyle: Home,
+  Nature: Trees,
+  Other: Camera,
 };
+
 
 export default function PhotoSlot({
   order,
@@ -41,7 +58,14 @@ export default function PhotoSlot({
 
       <div className="pt-4 space-y-3">
         <div className="flex items-center justify-end">
-          <span className="text-2xl">{TYPE_EMOJI[photoType] || '📷'}</span>
+          {(() => {
+            const IconComponent = TYPE_ICONS[photoType] || Camera;
+            return (
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl border-3 border-ink bg-[#C6FF4D] shadow-[3px_3px_0px_#0c0b09]">
+                <IconComponent className="w-5 h-5 text-ink stroke-[2.5]" />
+              </div>
+            );
+          })()}
         </div>
 
         <div className="space-y-1">
@@ -64,13 +88,15 @@ export default function PhotoSlot({
           {reason}
         </p>
         {caption && (
-          <div className="rounded-xl border-2 border-ink bg-[#C6FF4D]/25 p-2.5 font-sans text-xs font-bold text-ink leading-snug">
-            💬 &ldquo;{caption}&rdquo;
+          <div className="flex items-start gap-2 rounded-xl border-2 border-ink bg-[#C6FF4D]/25 p-2.5 font-sans text-xs font-bold text-ink leading-snug">
+            <MessageSquareQuote className="w-4 h-4 stroke-[2.5] text-ink flex-shrink-0 mt-0.5" />
+            <span>&ldquo;{caption}&rdquo;</span>
           </div>
         )}
         {required && (
-          <span className="inline-block rounded-md border border-ink bg-ink px-2 py-0.5 font-display text-[9px] font-black uppercase tracking-wider text-[#C6FF4D]">
-            ★ Essential Shot
+          <span className="inline-flex items-center gap-1 rounded-md border border-ink bg-ink px-2 py-0.5 font-display text-[9px] font-black uppercase tracking-wider text-[#C6FF4D]">
+            <Star className="w-3 h-3 stroke-[2.5] fill-[#C6FF4D]" />
+            <span>Essential Shot</span>
           </span>
         )}
       </div>

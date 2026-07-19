@@ -1,5 +1,7 @@
 'use client';
 
+import { RefreshCw } from 'lucide-react';
+
 interface RegenerateBtnProps {
   onClick: () => void;
   loading?: boolean;
@@ -19,7 +21,7 @@ export default function RegenerateBtn({ onClick, loading }: RegenerateBtnProps) 
         </>
       ) : (
         <>
-          <span className="text-sm">🔄</span>
+          <RefreshCw className="w-4 h-4 stroke-[2.5] transition-transform duration-500 group-hover:rotate-180" />
           <span>Regenerate Profile</span>
         </>
       )}

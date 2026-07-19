@@ -1,6 +1,7 @@
 'use client';
 
 import type { InterviewMessage } from '@/lib/types/interview';
+import { Bot } from 'lucide-react';
 
 interface MessageBubbleProps {
   message: InterviewMessage;
@@ -21,8 +22,8 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
       >
         {isAI ? (
           <div className="flex items-center gap-2 mb-2.5 pb-2 border-b-2 border-ink/15">
-            <div className="flex items-center justify-center w-5 h-5 rounded-full border-2 border-ink bg-[#C6FF4D] text-[10px] font-black">
-              🤖
+            <div className="flex items-center justify-center w-6 h-6 rounded-full border-2 border-ink bg-[#C6FF4D]">
+              <Bot className="w-3.5 h-3.5 text-ink stroke-[2.5]" />
             </div>
             <span className="font-display text-[11px] font-black uppercase tracking-widest text-ink">
               AI Interviewer

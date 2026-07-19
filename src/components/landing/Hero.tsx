@@ -14,7 +14,7 @@ export function Hero() {
           {/* Neo-brutalist tag pill */}
           <div className="mb-6 inline-flex items-center gap-2 border-2 border-ink bg-highlight px-3.5 py-1.5 font-display text-xs font-bold uppercase tracking-widest text-ink shadow-brutal-sm">
             <span className="h-2 w-2 rounded-full bg-ink" />
-            AI Profile Engine v2.0
+            AI Profile Engine v1.0
           </div>
 
           <h1 className="font-display text-[20vw] font-extrabold leading-[0.90] tracking-tight text-ink sm:text-[14vw] lg:text-[9vw]">

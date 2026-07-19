@@ -2,6 +2,23 @@
 
 import type { ConfidenceScores } from '@/lib/types/interview';
 import { PERSONALITY_CATEGORIES } from '@/lib/constants';
+import {
+  Laugh,
+  Brain,
+  Home,
+  Palette,
+  MessageCircle,
+  Heart,
+  Briefcase,
+  Plane,
+  Utensils,
+  BarChart2,
+  Trophy,
+  Sparkles,
+  AlertTriangle,
+  RefreshCw,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 interface ProgressBarProps {
   confidence: ConfidenceScores;
@@ -14,17 +31,18 @@ interface ProgressBarProps {
   onRetry?: () => void;
 }
 
-const CATEGORY_EMOJI: Record<string, string> = {
-  humor: '😂',
-  personality: '🧠',
-  lifestyle: '🏠',
-  hobbies: '🎨',
-  communication: '💬',
-  relationships: '💕',
-  career: '💼',
-  travel: '✈️',
-  food: '🍕',
+const CATEGORY_ICONS: Record<string, LucideIcon> = {
+  humor: Laugh,
+  personality: Brain,
+  lifestyle: Home,
+  hobbies: Palette,
+  communication: MessageCircle,
+  relationships: Heart,
+  career: Briefcase,
+  travel: Plane,
+  food: Utensils,
 };
+
 
 export default function ProgressBar({
   confidence,
@@ -64,8 +82,9 @@ export default function ProgressBar({
       {/* Completion CTA Box if finished */}
       {isComplete && onGenerate && (
         <div className="rounded-2xl border-4 border-ink bg-[#C6FF4D] p-4 text-center shadow-[4px_4px_0px_#0c0b09] animate-scale-in">
-          <div className="inline-block rounded-lg border-2 border-ink bg-surface px-2.5 py-0.5 font-display text-[11px] font-black uppercase text-ink mb-2">
-            🎉 Target Reached!
+          <div className="inline-flex items-center gap-1.5 rounded-lg border-2 border-ink bg-surface px-2.5 py-0.5 font-display text-[11px] font-black uppercase text-ink mb-2">
+            <Trophy className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>Target Reached!</span>
           </div>
           <p className="text-xs font-bold text-ink/90 mb-4 leading-relaxed">
             Your profile has enough depth to craft a top-1% Hinge profile.
@@ -75,7 +94,14 @@ export default function ProgressBar({
             disabled={status === 'ending'}
             className="w-full rounded-xl border-3 border-ink bg-ink px-4 py-3 font-display text-xs font-black uppercase tracking-wider text-[#C6FF4D] shadow-[4px_4px_0px_#0c0b09] transition-all hover:bg-surface hover:text-ink active:translate-x-0.5 active:translate-y-0.5 disabled:opacity-50"
           >
-            {status === 'ending' ? 'Generating Profile...' : '✨ Generate Profile Now'}
+            {status === 'ending' ? (
+              'Generating Profile...'
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                <Sparkles className="w-4 h-4 stroke-[2.5]" />
+                <span>Generate Profile Now</span>
+              </span>
+            )}
           </button>
         </div>
       )}
@@ -83,14 +109,20 @@ export default function ProgressBar({
       {/* Error / Retry Box */}
       {error && (
         <div className="rounded-2xl border-3 border-ink bg-[#FF4D4D] p-3 text-ink shadow-[4px_4px_0px_#0c0b09]">
-          <p className="font-display text-xs font-black uppercase tracking-wide mb-1">⚠️ Connection Notice</p>
+          <div className="flex items-center gap-1.5 font-display text-xs font-black uppercase tracking-wide mb-1">
+            <AlertTriangle className="w-4 h-4 stroke-[2.5]" />
+            <span>Connection Notice</span>
+          </div>
           <p className="font-sans text-[11px] font-bold text-ink/90 mb-2 leading-snug">{error}</p>
           {onRetry && (
             <button
               onClick={onRetry}
               className="w-full rounded-lg border-2 border-ink bg-surface px-3 py-1.5 font-display text-[11px] font-black uppercase text-ink shadow-[2px_2px_0px_#0c0b09] transition-all hover:bg-[#C6FF4D]"
             >
-              🔄 Retry Connection
+              <span className="flex items-center justify-center gap-1.5">
+                <RefreshCw className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Retry Connection</span>
+              </span>
             </button>
           )}
         </div>
@@ -104,7 +136,7 @@ export default function ProgressBar({
         <div className="grid grid-cols-3 gap-2">
           {PERSONALITY_CATEGORIES.map((cat) => {
             const score = confidence[cat] || 0;
-            const emoji = CATEGORY_EMOJI[cat] || '📊';
+            const IconComponent = CATEGORY_ICONS[cat] || BarChart2;
             const isScored = score > 0;
 
             return (
@@ -117,8 +149,8 @@ export default function ProgressBar({
                 }`}
                 title={`${cat.toUpperCase()}: ${score}%`}
               >
-                <div className="flex items-center gap-1">
-                  <span className="text-sm">{emoji}</span>
+                <div className="flex items-center gap-1.5">
+                  <IconComponent className="w-3.5 h-3.5 text-ink stroke-[2.5] flex-shrink-0" />
                   <span className="font-display text-[9px] font-black uppercase tracking-wider text-ink truncate max-w-[55px]">
                     {cat}
                   </span>

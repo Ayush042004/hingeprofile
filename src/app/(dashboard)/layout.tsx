@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
+import { Sparkles } from 'lucide-react';
 
 export default async function DashboardLayout({
   children,
@@ -42,16 +43,37 @@ export default async function DashboardLayout({
               href="/profile"
               className="flex items-center gap-2 rounded-xl border-3 border-ink bg-surface px-3.5 sm:px-4 py-2 text-ink shadow-[3px_3px_0px_#0c0b09] transition-all duration-150 hover:-translate-y-0.5 hover:bg-[#C6FF4D] hover:shadow-[5px_5px_0px_#0c0b09]"
             >
-              <span>✨ Profile</span>
+              <Sparkles className="w-4 h-4 stroke-[2.5] fill-[#C6FF4D]" />
+              <span>Profile</span>
             </Link>
           </div>
 
           {/* User Button inside Neo-Brutalist Frame */}
-          <div className="rounded-xl border-3 border-ink bg-surface p-1 shadow-[3px_3px_0px_#0c0b09] flex items-center justify-center">
+          <div className="rounded-xl border-3 border-ink bg-surface p-1 shadow-[3px_3px_0px_#0c0b09] transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0c0b09] flex items-center justify-center">
             <UserButton
               appearance={{
                 elements: {
-                  avatarBox: 'w-8 h-8 rounded-lg border-2 border-ink shadow-none',
+                  avatarBox:
+                    'w-8 h-8 rounded-lg border-2 border-ink shadow-none transition-transform duration-150 hover:scale-105',
+                  userButtonPopoverCard:
+                    '!bg-surface !border-4 !border-ink !rounded-2xl !p-4 !shadow-[8px_8px_0px_#0c0b09] !w-80 !overflow-hidden !animate-popover',
+                  userButtonPopoverActions: '!p-0 !mt-3 !flex !flex-col !gap-3',
+                  userButtonPopoverActionButton:
+                    '!border-3 !border-ink !bg-surface !rounded-xl !p-3.5 !shadow-[4px_4px_0px_#0c0b09] hover:!bg-[#C6FF4D] hover:!shadow-[6px_6px_0px_#0c0b09] hover:!-translate-y-0.5 !transition-all !duration-150 !w-full !flex !items-center !gap-3 !text-ink !font-display !font-bold !text-sm',
+                  userButtonPopoverActionButtonText:
+                    '!text-ink !font-display !font-extrabold !text-xs sm:!text-sm !uppercase !tracking-wider',
+                  userButtonPopoverActionButtonIcon: '!text-ink !w-4 !h-4',
+                  userPreview:
+                    '!bg-[#C6FF4D] !border-3 !border-ink !rounded-xl !p-3.5 !shadow-[4px_4px_0px_#0c0b09] !flex !items-center !gap-3.5 !mb-3',
+                  userPreviewAvatarBox: '!w-11 !h-11 !rounded-lg !border-2 !border-ink !shadow-none !flex-shrink-0',
+                  userPreviewAvatarContainer: '!border-0 !shadow-none !p-0 !m-0 !bg-transparent',
+                  userPreviewTextContainer: '!border-0 !shadow-none !p-0 !m-0 !bg-transparent !flex !flex-col !gap-0.5',
+                  userPreviewMainIdentifier:
+                    '!border-0 !shadow-none !p-0 !m-0 !bg-transparent !text-ink !font-display !font-black !text-base',
+                  userPreviewSecondaryIdentifier:
+                    '!border-0 !shadow-none !p-0 !m-0 !bg-transparent !text-ink/75 !font-sans !font-bold !text-xs',
+                  userButtonPopoverFooter:
+                    '!bg-transparent !border-0 !border-t-2 !border-solid !border-ink/15 !pt-3 !mt-3 !flex !flex-col !items-center !justify-center !shadow-none !gap-1',
                 },
               }}
             />

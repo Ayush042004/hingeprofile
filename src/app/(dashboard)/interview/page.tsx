@@ -6,6 +6,7 @@ import { useInterviewStore } from '@/lib/store/interviewStore';
 import ChatWindow from '@/components/interview/ChatWindow';
 import InterviewInput from '@/components/interview/InterviewInput';
 import ProgressBar from '@/components/interview/ProgressBar';
+import { Zap, Clock, Trophy, Mic, Sparkles } from 'lucide-react';
 
 const ONBOARDING_STEPS = [
   {
@@ -72,10 +73,11 @@ export default function InterviewPage() {
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
               <div className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-[#C6FF4D] px-4 py-1.5 font-display text-xs font-black uppercase tracking-widest text-ink shadow-[3px_3px_0px_#0c0b09]">
                 <span className="h-2.5 w-2.5 rounded-full bg-ink animate-pulse" />
-                <span>⚡ 3-Step Profile Engine</span>
+                <span className="flex items-center gap-1.5"><Zap className="w-4 h-4 stroke-[2.5] fill-ink text-[#C6FF4D]" />3-Step Profile Engine</span>
               </div>
-              <span className="rounded-xl border-2 border-ink bg-paper px-3 py-1 font-display text-xs font-black text-ink shadow-[2px_2px_0px_#0c0b09]">
-                ⏱️ Avg 10 Mins
+              <span className="flex items-center gap-1.5 rounded-xl border-2 border-ink bg-paper px-3 py-1 font-display text-xs font-black text-ink shadow-[2px_2px_0px_#0c0b09]">
+                <Clock className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Avg 10 Mins</span>
               </span>
             </div>
 
@@ -184,11 +186,16 @@ export default function InterviewPage() {
                 YOUR AI COACHING SESSION
               </h1>
             </div>
-            <p className="font-sans text-xs font-bold text-ink/70 mt-0.5">
-              {isComplete
-                ? '🎉 Target confidence met! Ready to generate.'
-                : 'Answer naturally — just talk like you would to a friend'}
-            </p>
+            <div className="font-sans text-xs font-bold text-ink/70 mt-0.5">
+              {isComplete ? (
+                <span className="flex items-center gap-1.5 text-ink font-extrabold">
+                  <Trophy className="w-4 h-4 stroke-[2.5] text-[#C6FF4D] fill-ink" />
+                  Target confidence met! Ready to generate.
+                </span>
+              ) : (
+                'Answer naturally — just talk like you would to a friend'
+              )}
+            </div>
           </div>
 
           {/* Mobile progress badge */}
@@ -209,8 +216,8 @@ export default function InterviewPage() {
         {status === 'starting' && (
           <div className="flex-1 flex items-center justify-center p-6">
             <div className="text-center rounded-2xl border-4 border-ink bg-surface p-8 shadow-[8px_8px_0px_#0c0b09] max-w-sm animate-scale-in">
-              <div className="flex items-center justify-center w-14 h-14 mx-auto rounded-full border-3 border-ink bg-[#C6FF4D] text-2xl font-black mb-4 animate-bounce">
-                🎙️
+              <div className="flex items-center justify-center w-16 h-16 mx-auto rounded-2xl border-3 border-ink bg-[#C6FF4D] shadow-[4px_4px_0px_#0c0b09] mb-4 animate-bounce">
+                <Mic className="w-7 h-7 text-ink stroke-[2.5]" />
               </div>
               <h3 className="font-display text-lg font-black uppercase tracking-tight text-ink">
                 Starting Interview...
@@ -235,7 +242,7 @@ export default function InterviewPage() {
               disabled={status === 'streaming' || status === 'ending' || isComplete}
               placeholder={
                 isComplete
-                  ? '🎉 Interview complete! Click "Generate Profile Now"'
+                  ? 'Interview complete! Click "Generate Profile Now"'
                   : 'Type your answer naturally...'
               }
             />
@@ -248,7 +255,10 @@ export default function InterviewPage() {
                   disabled={status === 'ending'}
                   className="w-full rounded-xl border-3 border-ink bg-ink py-4 font-display text-sm font-black uppercase tracking-wider text-[#C6FF4D] shadow-[4px_4px_0px_#0c0b09] transition-all hover:bg-[#C6FF4D] hover:text-ink"
                 >
-                  ✨ Generate My Profile Now
+                  <span className="flex items-center justify-center gap-2">
+                    <Sparkles className="w-4 h-4 stroke-[2.5]" />
+                    <span>Generate My Profile Now</span>
+                  </span>
                 </button>
               </div>
             )}

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
+import { Zap } from 'lucide-react';
 
 export function FinalCta() {
   return (
@@ -25,8 +26,9 @@ export function FinalCta() {
               Ready to stand out?
             </div>
 
-            <div className="hidden sm:inline-block -rotate-2 rounded-2xl border-4 border-ink bg-surface px-4 py-1.5 font-display text-xs font-black uppercase tracking-wider text-ink shadow-[4px_4px_0px_#0c0b09]">
-              ⚡ No Forms Allowed
+            <div className="hidden sm:inline-flex items-center gap-1.5 -rotate-2 rounded-2xl border-4 border-ink bg-surface px-4 py-1.5 font-display text-xs font-black uppercase tracking-wider text-ink shadow-[4px_4px_0px_#0c0b09]">
+              <Zap className="w-3.5 h-3.5 stroke-[2.5] fill-[#C6FF4D] text-ink" />
+              <span>No Forms Allowed</span>
             </div>
           </div>
 
