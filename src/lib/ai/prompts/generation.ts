@@ -278,18 +278,12 @@ Personality
 PHOTO REQUIREMENTS
 ====================
 
-For EVERY photo describe:
+For EVERY photo description:
 
-- clothing
-- location
-- lighting
-- facial expression
-- body language
-- camera angle
-- framing
-- background
-- mood
-- why it works psychologically
+- Give a short, punchy 1-2 sentence idea of how the photo should look (max 20-25 words).
+- Focus strictly on clear visual instructions (e.g., setting, outfit, pose, vibe).
+- Keep it extremely concise and direct—NO long paragraphs or essays.
+- Keep the reason field minimal or blank.
 
 ====================
 STRICT RULES
@@ -375,8 +369,8 @@ Return a valid JSON array containing exactly 6 objects conforming to the schema 
     "order": 1,
     "photoType": "Portrait", // choose from Portrait, Travel, Hobby, Friends, Pet, Food, Sports, Lifestyle, Nature, Other
     "title": "Title of the photo strategy",
-    "description": "Detailed description of clothing, location, lighting, pose, etc.",
-    "reason": "Psychological rationale of why it works",
+    "description": "Short 1-2 sentence visual idea of the photo (under 25 words).",
+    "reason": "Brief rationale",
     "caption": "Magnetic photo caption text (no emojis)",
     "importance": 9, // rating 1 to 10
     "required": true // boolean

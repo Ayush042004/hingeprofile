@@ -21,9 +21,9 @@ interface PhotoSlotProps {
   photoType: string;
   title: string;
   description: string;
-  reason: string;
-  caption: string;
-  required: boolean;
+  reason?: string;
+  caption?: string;
+  required?: boolean;
 }
 
 const TYPE_ICONS: Record<string, LucideIcon> = {
@@ -45,12 +45,11 @@ export default function PhotoSlot({
   photoType,
   title,
   description,
-  reason,
   caption,
   required,
 }: PhotoSlotProps) {
   return (
-    <div className="group relative flex flex-col justify-between rounded-3xl border-4 border-ink bg-surface p-6 shadow-[8px_8px_0px_#0c0b09] transition-all duration-200 hover:-translate-y-1 hover:shadow-[10px_10px_0px_#C6FF4D] min-h-[310px]">
+    <div className="group relative flex flex-col justify-between rounded-3xl border-4 border-ink bg-surface p-6 shadow-[8px_8px_0px_#0c0b09] transition-all duration-200 hover:-translate-y-1 hover:shadow-[10px_10px_0px_#C6FF4D]">
       {/* Number Badge */}
       <div className="absolute -top-3 -left-3 flex h-10 w-10 items-center justify-center rounded-xl border-3 border-ink bg-[#C6FF4D] font-display text-sm font-black text-ink shadow-[3px_3px_0px_#0c0b09]">
         {order}
@@ -82,24 +81,24 @@ export default function PhotoSlot({
         </p>
       </div>
 
-      <div className="mt-5 pt-4 border-t-2 border-ink/20 space-y-2.5">
-        <p className="font-sans text-[11px] font-medium text-ink/75 leading-normal">
-          <span className="font-display font-black text-ink uppercase">Why: </span>
-          {reason}
-        </p>
-        {caption && (
-          <div className="flex items-start gap-2 rounded-xl border-2 border-ink bg-[#C6FF4D]/25 p-2.5 font-sans text-xs font-bold text-ink leading-snug">
-            <MessageSquareQuote className="w-4 h-4 stroke-[2.5] text-ink flex-shrink-0 mt-0.5" />
-            <span>&ldquo;{caption}&rdquo;</span>
-          </div>
-        )}
-        {required && (
-          <span className="inline-flex items-center gap-1 rounded-md border border-ink bg-ink px-2 py-0.5 font-display text-[9px] font-black uppercase tracking-wider text-[#C6FF4D]">
-            <Star className="w-3 h-3 stroke-[2.5] fill-[#C6FF4D]" />
-            <span>Essential Shot</span>
-          </span>
-        )}
-      </div>
+      {(caption || required) && (
+        <div className="mt-4 pt-3 border-t-2 border-ink/20 space-y-2.5">
+          {caption && (
+            <div className="flex items-start gap-2 rounded-xl border-2 border-ink bg-[#C6FF4D]/25 p-2.5 font-sans text-xs font-bold text-ink leading-snug">
+              <MessageSquareQuote className="w-4 h-4 stroke-[2.5] text-ink flex-shrink-0 mt-0.5" />
+              <span>&ldquo;{caption}&rdquo;</span>
+            </div>
+          )}
+          {required && (
+            <div>
+              <span className="inline-flex items-center gap-1 rounded-md border border-ink bg-ink px-2 py-0.5 font-display text-[9px] font-black uppercase tracking-wider text-[#C6FF4D]">
+                <Star className="w-3 h-3 stroke-[2.5] fill-[#C6FF4D]" />
+                <span>Essential Shot</span>
+              </span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

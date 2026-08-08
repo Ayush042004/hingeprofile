@@ -24,8 +24,8 @@ const PhotoSuggestionSchema = z
       order: z.number().int().min(1).max(6),
       photoType: PhotoTypeEnum,
       title: z.string().max(150),
-      description: z.string().max(1000),
-      reason: z.string().max(1000),
+      description: z.string().max(300),
+      reason: z.string().max(500).optional().default(""),
       caption: z.string().max(200),
       importance: z.number().int().min(1).max(10),
       required: z.boolean(),
@@ -56,9 +56,9 @@ Requirements:
 - Return exactly 6 recommendations.
 - Use unique order values from 1 to 6.
 - Recommend a variety of photo types.
-- Title should be short.
-- Description should explain what the photo should look like.
-- Reason should explain why it improves the dating profile.
+- Title should be short (2-4 words).
+- Description MUST be a quick, concise 1-2 sentence idea (max 25 words) of how the photo should look (e.g. outfit, pose, background). Keep it short and actionable.
+- Reason: keep minimal or empty.
 - Caption must be under 80 characters.
 - Recommendations should feel realistic and personalized.
 `,
