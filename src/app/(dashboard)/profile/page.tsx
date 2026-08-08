@@ -142,6 +142,9 @@ export default function ProfilePage() {
                 order={photo.order}
                 photoType={photo.photoType}
                 title={photo.title}
+                shot={photo.shot}
+                look={photo.look}
+                setting={photo.setting}
                 description={photo.description}
                 reason={photo.reason}
                 caption={photo.caption}

@@ -8,7 +8,7 @@ interface PromptAnswer {
   copied: boolean;
 }
 
-interface  PhotoSuggestion {
+interface PhotoSuggestion {
   order: number;
   photoType:
     | "Portrait"
@@ -22,11 +22,14 @@ interface  PhotoSuggestion {
     | "Nature"
     | "Other";
   title: string;
-  description: string;
-  reason: string;
-  caption: string;
-  importance: number;
-  required: boolean;
+  shot?: string;
+  look?: string;
+  setting?: string;
+  description?: string;
+  reason?: string;
+  caption?: string;
+  importance?: number;
+  required?: boolean;
 }
 
 export interface GeneratedProfile extends Document {
@@ -118,15 +121,33 @@ const PhotoSuggestionSchema =
         trim: true
       },
 
+      shot: {
+        type: String,
+        default: "",
+        trim: true
+      },
+
+      look: {
+        type: String,
+        default: "",
+        trim: true
+      },
+
+      setting: {
+        type: String,
+        default: "",
+        trim: true
+      },
+
       description: {
         type: String,
-        required: true,
+        default: "",
         trim: true
       },
 
       reason: {
         type: String,
-        required: true,
+        default: "",
         trim: true
       },
 

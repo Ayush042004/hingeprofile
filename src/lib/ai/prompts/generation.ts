@@ -278,12 +278,14 @@ Personality
 PHOTO REQUIREMENTS
 ====================
 
-For EVERY photo description:
+For EVERY photo recommendation:
 
-- Give a short, punchy 1-2 sentence idea of how the photo should look (max 20-25 words).
-- Focus strictly on clear visual instructions (e.g., setting, outfit, pose, vibe).
-- Keep it extremely concise and direct—NO long paragraphs or essays.
-- Keep the reason field minimal or blank.
+- Break down the recommendation into 3 structured concise fields:
+  1. shot: 8 to 15 words describing framing, expression, or camera angle.
+  2. look: 5 to 12 words describing outfit, apparel, or style.
+  3. setting: 5 to 12 words describing location, background, or environment.
+- Do NOT write long paragraphs or essays.
+- Keep the recommendation tailored specifically to the candidate's personality, interests, and lifestyle.
 
 ====================
 STRICT RULES
@@ -368,12 +370,13 @@ Return a valid JSON array containing exactly 6 objects conforming to the schema 
   {
     "order": 1,
     "photoType": "Portrait", // choose from Portrait, Travel, Hobby, Friends, Pet, Food, Sports, Lifestyle, Nature, Other
-    "title": "Title of the photo strategy",
-    "description": "Short 1-2 sentence visual idea of the photo (under 25 words).",
-    "reason": "Brief rationale",
-    "caption": "Magnetic photo caption text (no emojis)",
-    "importance": 9, // rating 1 to 10
-    "required": true // boolean
+    "title": "The Magnetic Opener",
+    "shot": "Chest-up portrait with natural daylight and direct eye contact.",
+    "look": "Fitted shirt or smart-casual knit in a complementary color.",
+    "setting": "Clean wall, window, or minimalist interior.",
+    "caption": "Let's talk about the ending of Fight Club.",
+    "importance": 9,
+    "required": true
   },
   ...
 ]

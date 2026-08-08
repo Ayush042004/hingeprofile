@@ -24,11 +24,14 @@ const PhotoSuggestionSchema = z
       order: z.number().int().min(1).max(6),
       photoType: PhotoTypeEnum,
       title: z.string().max(150),
-      description: z.string().max(300),
+      shot: z.string().max(250).optional().default(""),
+      look: z.string().max(250).optional().default(""),
+      setting: z.string().max(250).optional().default(""),
+      description: z.string().max(500).optional().default(""),
       reason: z.string().max(500).optional().default(""),
-      caption: z.string().max(200),
-      importance: z.number().int().min(1).max(10),
-      required: z.boolean(),
+      caption: z.string().max(200).optional().default(""),
+      importance: z.number().int().min(1).max(10).optional().default(5),
+      required: z.boolean().optional().default(false),
     })
   )
   .length(6);
@@ -50,17 +53,18 @@ Candidate Personality
 
 ${JSON.stringify(personality, null, 2)}
 
-Generate exactly 6 Hinge photo recommendations.
+Generate exactly 6 Hinge photo recommendations tailored to this candidate.
 
 Requirements:
 - Return exactly 6 recommendations.
 - Use unique order values from 1 to 6.
 - Recommend a variety of photo types.
-- Title should be short (2-4 words).
-- Description MUST be a quick, concise 1-2 sentence idea (max 25 words) of how the photo should look (e.g. outfit, pose, background). Keep it short and actionable.
-- Reason: keep minimal or empty.
-- Caption must be under 80 characters.
-- Recommendations should feel realistic and personalized.
+- Title: short title (2-4 words).
+- Shot: 8-15 words describing framing, pose, expression, or camera angle.
+- Look: 5-12 words describing outfit, clothes, or appearance.
+- Setting: 5-12 words describing environment, location, or background.
+- Caption: magnetic photo caption text under 80 characters.
+- Recommendations should feel highly realistic and personalized.
 `,
     });
 
