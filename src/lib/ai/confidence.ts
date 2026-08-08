@@ -24,9 +24,13 @@ const ConfidenceSchema = z.object({
  * Analyzes the interview transcript so far and returns a confidence
  * score (0–100) for each personality category, indicating how well
  * the system understands the candidate in that area.
+ * 
+ * Takes optional `previousConfidence` to enforce monotonic accumulation
+ * so confidence never decreases as the conversation progresses.
  */
 export async function scoreConfidence(
-  messages: ModelMessage[]
+  messages: ModelMessage[],
+  previousConfidence?: ConfidenceScores
 ): Promise<ConfidenceScores> {
   const transcript = messages
     .filter(
@@ -56,7 +60,17 @@ Return ONLY valid JSON.`,
     maxOutputTokens: 4000,
   });
 
-  const scores = object as Record<PersonalityCategory, number>;
+  const rawScores = object as Record<PersonalityCategory, number>;
+
+  // Accumulate scores monotonically using Math.max with previous confidence.
+  // Gained understanding about a user's trait should not degrade when shifting topics.
+  const scores = {} as Record<PersonalityCategory, number>;
+  for (const c of PERSONALITY_CATEGORIES) {
+    const prev = previousConfidence?.[c] ?? 0;
+    const current = rawScores[c] ?? 0;
+    scores[c] = Math.max(prev, current);
+  }
+
   const values = PERSONALITY_CATEGORIES.map((c) => scores[c]);
   const overall = Math.round(
     values.reduce((sum, v) => sum + v, 0) / values.length

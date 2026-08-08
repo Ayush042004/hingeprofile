@@ -79,8 +79,8 @@ export async function POST(req: NextRequest) {
       })
     );
 
-    // Score confidence
-    const confidence = await scoreConfidence(coreMessages);
+    // Score confidence monotonically
+    const confidence = await scoreConfidence(coreMessages, session.confidence);
     session.confidence = confidence;
 
     // Pick next topic
