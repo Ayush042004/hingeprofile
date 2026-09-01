@@ -71,9 +71,9 @@ function cleanSentence(str: string): string {
  * Otherwise, intelligently parses paragraph description into concise rows.
  */
 export function normalizePhotoSuggestion(photo: RawPhotoSuggestion): NormalizedPhotoInfo {
-  let shot = photo.shot?.trim();
-  let look = photo.look?.trim();
-  let setting = photo.setting?.trim();
+  const shot = photo.shot?.trim();
+  const look = photo.look?.trim();
+  const setting = photo.setting?.trim();
 
   // If all structured fields exist, clean & bound them
   if (shot && look && setting) {

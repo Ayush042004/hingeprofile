@@ -1,4 +1,8 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, {
+  Document,
+  Schema,
+  type SchemaDefinitionProperty,
+} from "mongoose";
 
 interface AITrait<T> {
   value: T;
@@ -82,7 +86,10 @@ export interface PersonalityProfile extends Document {
   updatedAt: Date;
 }
 
-const aiTrait = (type: any, defaultValue: any) => ({
+const aiTrait = <T>(
+  type: SchemaDefinitionProperty<T>,
+  defaultValue: T
+) => ({
   value: {
     type,
     default: defaultValue,
