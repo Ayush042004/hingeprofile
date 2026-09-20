@@ -63,15 +63,32 @@ export const useProfileStore = create<ProfileStore>((set) => ({
 
   regenerateProfile: async () => {
     set({ loading: true, error: null });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 45000);
+
     try {
-      const res = await fetch('/api/profile/regenerate', { method: 'POST' });
-      if (!res.ok) throw new Error('Failed to regenerate profile');
+      const res = await fetch('/api/profile/regenerate', {
+        method: 'POST',
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || data.error || 'Failed to regenerate profile');
+      }
       const data = await res.json();
       set({ generatedProfile: data.profile, loading: false });
     } catch (err) {
+      clearTimeout(timeoutId);
+      const isAbort = err instanceof Error && err.name === 'AbortError';
       set({
         loading: false,
-        error: err instanceof Error ? err.message : 'Failed to regenerate',
+        error: isAbort
+          ? 'Regeneration timed out. Please try again.'
+          : err instanceof Error
+          ? err.message
+          : 'Failed to regenerate',
       });
     }
   },

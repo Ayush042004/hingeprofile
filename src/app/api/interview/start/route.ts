@@ -4,12 +4,13 @@ import dbConnect from '@/lib/db/connect';
 import UserModel from '@/lib/db/models/User';
 import InterviewSession from '@/lib/db/models/InterviewSession';
 import { getOpeningQuestion } from '@/lib/ai/agents/InterviewAgent';
+import { createErrorResponse } from '@/lib/utils/apiResponse';
 
 export async function POST() {
   try {
     const { userId: clerkId } = await auth();
     if (!clerkId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return createErrorResponse('Unauthorized', 401);
     }
 
     await dbConnect();
@@ -82,10 +83,6 @@ export async function POST() {
       },
     });
   } catch (error) {
-    console.error('Interview start error:', error);
-    return NextResponse.json(
-      { error: 'Failed to start interview' },
-      { status: 500 }
-    );
+    return createErrorResponse('Something went wrong. Please try again.', 500, error);
   }
 }

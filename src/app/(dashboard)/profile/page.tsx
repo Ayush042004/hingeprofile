@@ -94,6 +94,24 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-3.5 sm:px-6 py-6 sm:py-12 min-w-0">
+      {/* ── Inline Error Notification ───────────────── */}
+      {error && (
+        <div className="mb-6 flex items-center justify-between rounded-2xl border-3 border-ink bg-[#FF4D4D] p-4 text-ink shadow-[4px_4px_0px_#0c0b09] animate-scale-in">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 shrink-0 stroke-[2.5]" />
+            <span className="font-sans text-xs sm:text-sm font-bold uppercase tracking-wide">
+              {error}
+            </span>
+          </div>
+          <button
+            onClick={() => useProfileStore.setState({ error: null })}
+            className="rounded-lg border-2 border-ink bg-surface px-2.5 py-1 font-display text-[10px] font-black uppercase text-ink hover:bg-paper"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
+
       {/* ── Header Bar ──────────────────────────────── */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 mb-8 sm:mb-12 pb-6 border-b-4 border-ink animate-fade-in">
         <div>

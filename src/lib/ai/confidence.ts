@@ -31,19 +31,21 @@ const ConfidenceSchema = z.object({
 export async function scoreConfidence(
   messages: ModelMessage[],
   previousConfidence?: ConfidenceScores
-): Promise<ConfidenceScores> {
-  const transcript = messages
-    .filter(
-      (m): m is ModelMessage & { content: string } =>
-        typeof m.content === 'string'
-    )
-    .map((m) => `${m.role.toUpperCase()}: ${m.content}`)
-    .join('\n\n');
+): Promise<ConfidenceScores | null> {
+  try {
+    const transcript = messages
+      .filter(
+        (m): m is ModelMessage & { content: string } =>
+          typeof m.content === 'string'
+      )
+      .map((m) => `${m.role.toUpperCase()}: ${m.content}`)
+      .join('\n\n');
 
-  const { object } = await generateObject({
-    model: chatModel,
-    schema: ConfidenceSchema,
-    system: `You are an interview analyst. Read the conversation transcript and rate how confidently you understand the candidate in each personality category.
+    const { object } = await generateObject({
+      model: chatModel,
+      schema: ConfidenceSchema,
+      maxRetries: 0,
+      system: `You are an interview analyst. Read the conversation transcript and rate how confidently you understand the candidate in each personality category.
 
 Score each category 0–100:
 - 0 = not discussed at all
@@ -55,26 +57,44 @@ Score each category 0–100:
 Categories: ${PERSONALITY_CATEGORIES.join(', ')}
 
 Return ONLY valid JSON.`,
-    prompt: `Interview Transcript:\n\n${transcript}`,
-    temperature: 0,
-    maxOutputTokens: 4000,
-  });
+      prompt: `Interview Transcript:\n\n${transcript}`,
+      temperature: 0,
+      maxOutputTokens: 4000,
+    });
 
-  const rawScores = object as Record<PersonalityCategory, number>;
+    const rawScores = object as Record<PersonalityCategory, number>;
 
-  // Accumulate scores monotonically using Math.max with previous confidence.
-  // Gained understanding about a user's trait should not degrade when shifting topics.
-  const scores = {} as Record<PersonalityCategory, number>;
-  for (const c of PERSONALITY_CATEGORIES) {
-    const prev = previousConfidence?.[c] ?? 0;
-    const current = rawScores[c] ?? 0;
-    scores[c] = Math.max(prev, current);
+    // Accumulate scores monotonically using Math.max with previous confidence.
+    // Gained understanding about a user's trait should not degrade when shifting topics.
+    const scores = {} as Record<PersonalityCategory, number>;
+    for (const c of PERSONALITY_CATEGORIES) {
+      const prev = previousConfidence?.[c] ?? 0;
+      const current = rawScores[c] ?? 0;
+      scores[c] = Math.max(prev, current);
+    }
+
+    const values = PERSONALITY_CATEGORIES.map((c) => scores[c]);
+    const overall = Math.round(
+      values.reduce((sum, v) => sum + v, 0) / values.length
+    );
+
+    return { ...scores, overall };
+  } catch (error: unknown) {
+    const errString = String((error as { message?: string })?.message || error || '');
+    const isQuotaExceeded =
+      errString.includes('429') ||
+      errString.includes('RESOURCE_EXHAUSTED') ||
+      errString.includes('Quota exceeded') ||
+      errString.includes('rate limit');
+
+    if (isQuotaExceeded) {
+      console.warn(
+        'Confidence scoring skipped: Gemini quota exceeded. Interview will continue without updating confidence.'
+      );
+    } else {
+      console.error('Confidence scoring failed:', error);
+    }
+
+    return null;
   }
-
-  const values = PERSONALITY_CATEGORIES.map((c) => scores[c]);
-  const overall = Math.round(
-    values.reduce((sum, v) => sum + v, 0) / values.length
-  );
-
-  return { ...scores, overall };
 }

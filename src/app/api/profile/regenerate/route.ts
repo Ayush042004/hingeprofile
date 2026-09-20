@@ -8,29 +8,37 @@ import { GeneratedProfileModel } from '@/lib/db/models/GeneratedProfile';
 import { PromptLibraryModel } from '@/lib/db/models/PromptLibrary';
 import PersonalityProfile from '@/lib/db/models/PersonalityProfile';
 import { composeProfile } from '@/lib/ai/agents/ProfileComposer';
+import { checkRateLimit } from '@/lib/utils/rateLimiter';
+import { createErrorResponse } from '@/lib/utils/apiResponse';
 
 export async function POST() {
   try {
     const { userId: clerkId } = await auth();
     if (!clerkId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return createErrorResponse('Unauthorized', 401);
     }
 
     await dbConnect();
 
     const user = await UserModel.findOne({ clerkId });
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return createErrorResponse('User not found', 404);
+    }
+
+    // Rate Limiting: max 5 regeneration requests per 5 minutes per user
+    const rateLimit = await checkRateLimit(`rate_regen_${user._id}`, 5, 300);
+    if (!rateLimit.allowed) {
+      return createErrorResponse(
+        'Too many requests. Please try again shortly.',
+        429
+      );
     }
 
     const personalityProfileDoc = await PersonalityProfile.findOne({
       user: user._id,
     });
     if (!personalityProfileDoc) {
-      return NextResponse.json(
-        { error: 'Complete an interview first' },
-        { status: 400 }
-      );
+      return createErrorResponse('Complete an interview first', 400);
     }
 
     // Get latest completed session
@@ -40,10 +48,7 @@ export async function POST() {
     }).sort({ endedAt: -1 });
 
     if (!session) {
-      return NextResponse.json(
-        { error: 'No completed interview found' },
-        { status: 400 }
-      );
+      return createErrorResponse('No completed interview found', 400);
     }
 
     // Get previous version number
@@ -71,8 +76,14 @@ export async function POST() {
       })
     );
 
-    // Compose profile
-    const composed = await composeProfile(transcript, promptOptions);
+    // Compose profile reusing existing extracted personality
+    const existingPersonality = personalityProfileDoc.toJSON();
+    const composed = await composeProfile(
+      transcript,
+      promptOptions,
+      'Balanced',
+      existingPersonality
+    );
 
     // Archive old profiles
     await GeneratedProfileModel.updateMany(
@@ -108,10 +119,6 @@ export async function POST() {
       profile: generated.toJSON(),
     });
   } catch (error) {
-    console.error('Profile regeneration error:', error);
-    return NextResponse.json(
-      { error: 'Failed to regenerate profile' },
-      { status: 500 }
-    );
+    return createErrorResponse('Something went wrong. Please try again.', 500, error);
   }
 }

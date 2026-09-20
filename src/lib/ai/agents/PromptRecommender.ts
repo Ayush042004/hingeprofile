@@ -27,7 +27,7 @@ export async function recommendPrompts(
       schema: RecommendationSchema,
       system: promptRecommendSystemPrompt,
       temperature: 0.4,
-      maxOutputTokens: 8000,
+      maxOutputTokens: 4000,
       prompt: `
 Candidate Personality
 
@@ -49,19 +49,21 @@ Task:
 
     const uniqueIds = [...new Set(object.promptIds)];
 
-    if (uniqueIds.length !== 3) {
-      throw new Error("Duplicate prompt IDs generated.");
+    if (uniqueIds.length === 3 && uniqueIds.every((id) => validIds.has(id))) {
+      return uniqueIds;
     }
 
-    for (const id of uniqueIds) {
-      if (!validIds.has(id)) {
-        throw new Error(`Invalid prompt ID returned: ${id}`);
-      }
-    }
-
-    return uniqueIds;
+    console.warn("Prompt recommendation returned invalid/duplicate IDs, using deterministic fallback selection.");
+    return getFallbackPromptIds(allPrompts);
   } catch (error) {
-    console.error("Prompt recommendation failed:", error);
-    throw new Error("Failed to recommend prompts.");
+    console.warn("Prompt recommendation failed, using deterministic fallback selection:", error);
+    return getFallbackPromptIds(allPrompts);
   }
+}
+
+function getFallbackPromptIds(allPrompts: PromptOption[]): string[] {
+  if (allPrompts.length >= 3) {
+    return allPrompts.slice(0, 3).map((p) => p._id);
+  }
+  return allPrompts.map((p) => p._id);
 }

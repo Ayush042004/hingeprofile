@@ -8,15 +8,14 @@ import { conductInterview } from '@/lib/ai/agents/InterviewAgent';
 import { scoreConfidence } from '@/lib/ai/confidence';
 import { pickNextQuestionTopic } from '@/lib/ai/questionEngine';
 import { validateMessageInput, validateObjectId } from '@/lib/utils/validators';
+import { checkRateLimit } from '@/lib/utils/rateLimiter';
+import { createErrorResponse } from '@/lib/utils/apiResponse';
 
 export async function POST(req: NextRequest) {
   try {
     const { userId: clerkId } = await auth();
     if (!clerkId) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return createErrorResponse('Unauthorized', 401);
     }
 
     const body = await req.json();
@@ -25,43 +24,37 @@ export async function POST(req: NextRequest) {
     // Validate inputs
     const idError = validateObjectId(sessionId);
     if (idError) {
-      return new Response(JSON.stringify({ error: idError }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return createErrorResponse(idError, 400);
     }
 
     const msgError = validateMessageInput(message);
     if (msgError) {
-      return new Response(JSON.stringify({ error: msgError }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return createErrorResponse(msgError, 400);
     }
 
     await dbConnect();
 
     const user = await UserModel.findOne({ clerkId });
     if (!user) {
-      return new Response(JSON.stringify({ error: 'User not found' }), {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return createErrorResponse('User not found', 404);
+    }
+
+    // Rate Limiting: max 10 message requests per minute per user
+    const rateLimit = await checkRateLimit(`rate_msg_${user._id}`, 10, 60);
+    if (!rateLimit.allowed) {
+      return createErrorResponse(
+        'Too many requests. Please try again shortly.',
+        429
+      );
     }
 
     const session = await InterviewSession.findById(sessionId);
     if (!session || session.user.toString() !== user._id.toString()) {
-      return new Response(JSON.stringify({ error: 'Session not found' }), {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return createErrorResponse('Session not found', 404);
     }
 
     if (session.status !== 'active') {
-      return new Response(JSON.stringify({ error: 'Session is not active' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return createErrorResponse('Session is not active', 400);
     }
 
     // Append user message
@@ -79,9 +72,26 @@ export async function POST(req: NextRequest) {
       })
     );
 
-    // Score confidence monotonically
-    const confidence = await scoreConfidence(coreMessages, session.confidence);
-    session.confidence = confidence;
+    // Calculate user message count
+    const userMessageCount = session.messages.filter(
+      (m: { role: string }) => m.role === 'user'
+    ).length;
+
+    // Only run confidence scoring approximately every 4 user messages (e.g., messages 4, 8, 12, 16...)
+    const shouldScoreConfidence =
+      userMessageCount > 0 && userMessageCount % 4 === 0;
+
+    let confidence = session.confidence;
+    if (shouldScoreConfidence) {
+      const scoredConfidence = await scoreConfidence(
+        coreMessages,
+        session.confidence
+      );
+      if (scoredConfidence !== null) {
+        confidence = scoredConfidence;
+        session.confidence = confidence;
+      }
+    }
 
     // Pick next topic
     const nextTopic = pickNextQuestionTopic(confidence);
@@ -155,10 +165,6 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Interview message error:', error);
-    return new Response(
-      JSON.stringify({ error: 'Failed to process message' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    );
+    return createErrorResponse('Something went wrong. Please try again.', 500, error);
   }
 }

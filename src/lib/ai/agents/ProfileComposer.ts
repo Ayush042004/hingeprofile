@@ -6,6 +6,8 @@ import { generatePromptAnswers } from "./AnswerGenerator";
 import { advisePhotos } from "./PhotoAdvisor";
 import { recommendPrompts } from "./PromptRecommender";
 
+import type { ExtractedPersonality } from "./PersonalityExtractor";
+
 interface PromptOption {
   _id: string;
   prompt: string;
@@ -17,10 +19,11 @@ interface PromptOption {
 export async function composeProfile(
   transcript: ModelMessage[],
   allPrompts: PromptOption[],
-  style = "Balanced"
+  style = "Balanced",
+  existingPersonality?: ExtractedPersonality
 ) {
-  // Step 1: Extract personality
-  const personality = await extractPersonality(transcript);
+  // Step 1: Extract personality (or reuse existing personality if provided)
+  const personality = existingPersonality || (await extractPersonality(transcript));
 
   // Step 2: Recommend prompts
   const recommendedIds = await recommendPrompts(

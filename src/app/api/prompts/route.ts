@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db/connect';
 import { PromptLibraryModel } from '@/lib/db/models/PromptLibrary';
+import { createErrorResponse } from '@/lib/utils/apiResponse';
 
 export async function GET() {
   try {
@@ -11,10 +12,6 @@ export async function GET() {
 
     return NextResponse.json({ prompts });
   } catch (error) {
-    console.error('Prompts fetch error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch prompts' },
-      { status: 500 }
-    );
+    return createErrorResponse('Something went wrong. Please try again.', 500, error);
   }
 }

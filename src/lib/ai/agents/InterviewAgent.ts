@@ -44,7 +44,7 @@ ${
       system: systemInstruction,
       messages: messages,
       temperature: 0.4,
-      maxOutputTokens: 1000,
+      maxOutputTokens: 3000,
     });
   } catch (error) {
     console.error("Interview generation failed:", error);
@@ -65,7 +65,7 @@ export async function getOpeningQuestion() {
 - The question should be about personality, communication, or humor.
 - Do not ask follow-up questions.`,
     temperature: 0.4,
-    maxOutputTokens: 1000,
+    maxOutputTokens: 3000,
   });
 
   return result.object;

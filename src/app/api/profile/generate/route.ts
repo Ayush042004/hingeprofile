@@ -8,19 +8,30 @@ import { GeneratedProfileModel } from '@/lib/db/models/GeneratedProfile';
 import { PromptLibraryModel } from '@/lib/db/models/PromptLibrary';
 import PersonalityProfile from '@/lib/db/models/PersonalityProfile';
 import { composeProfile } from '@/lib/ai/agents/ProfileComposer';
+import { checkRateLimit } from '@/lib/utils/rateLimiter';
+import { createErrorResponse } from '@/lib/utils/apiResponse';
 
 export async function POST(req: Request) {
   try {
     const { userId: clerkId } = await auth();
     if (!clerkId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return createErrorResponse('Unauthorized', 401);
     }
 
     await dbConnect();
 
     const user = await UserModel.findOne({ clerkId });
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return createErrorResponse('User not found', 404);
+    }
+
+    // Rate Limiting: max 5 generation requests per 5 minutes per user
+    const rateLimit = await checkRateLimit(`rate_gen_${user._id}`, 5, 300);
+    if (!rateLimit.allowed) {
+      return createErrorResponse(
+        'Too many requests. Please try again shortly.',
+        429
+      );
     }
 
     // Must have a personality profile
@@ -28,10 +39,7 @@ export async function POST(req: Request) {
       user: user._id,
     });
     if (!personalityProfileDoc) {
-      return NextResponse.json(
-        { error: 'Complete an interview first' },
-        { status: 400 }
-      );
+      return createErrorResponse('Complete an interview first', 400);
     }
 
     // Get latest completed session transcript
@@ -41,16 +49,10 @@ export async function POST(req: Request) {
     }).sort({ endedAt: -1 });
 
     if (!session) {
-      return NextResponse.json(
-        { error: 'No completed interview found' },
-        { status: 400 }
-      );
+      return createErrorResponse('No completed interview found', 400);
     }
 
     // ── Guard: return existing profile instead of re-generating ──
-    // Each interview session should only auto-generate one initial profile.
-    // Refreshing the page must return the existing profile, not create a new one.
-    // Only the explicit "Regenerate" button (POST /api/profile/regenerate) creates new versions.
     const existingProfile = await GeneratedProfileModel.findOne({
       userId: user._id,
       status: 'active',
@@ -121,10 +123,6 @@ export async function POST(req: Request) {
       profile: generated.toJSON(),
     });
   } catch (error) {
-    console.error('Profile generation error:', error);
-    return NextResponse.json(
-      { error: 'Failed to generate profile' },
-      { status: 500 }
-    );
+    return createErrorResponse('Something went wrong. Please try again.', 500, error);
   }
 }

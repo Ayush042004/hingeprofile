@@ -7,31 +7,32 @@ import InterviewSession from '@/lib/db/models/InterviewSession';
 import PersonalityProfile from '@/lib/db/models/PersonalityProfile';
 import { extractPersonality } from '@/lib/ai/agents/PersonalityExtractor';
 import { validateObjectId } from '@/lib/utils/validators';
+import { createErrorResponse } from '@/lib/utils/apiResponse';
 
 export async function POST(req: Request) {
   try {
     const { userId: clerkId } = await auth();
     if (!clerkId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return createErrorResponse('Unauthorized', 401);
     }
 
     const { sessionId } = await req.json();
 
     const idError = validateObjectId(sessionId);
     if (idError) {
-      return NextResponse.json({ error: idError }, { status: 400 });
+      return createErrorResponse(idError, 400);
     }
 
     await dbConnect();
 
     const user = await UserModel.findOne({ clerkId });
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return createErrorResponse('User not found', 404);
     }
 
     const session = await InterviewSession.findById(sessionId);
     if (!session || session.user.toString() !== user._id.toString()) {
-      return NextResponse.json({ error: 'Session not found' }, { status: 404 });
+      return createErrorResponse('Session not found', 404);
     }
 
     // Mark session complete
@@ -117,7 +118,7 @@ export async function POST(req: Request) {
         },
         lastInterview: session._id,
       },
-      { upsert: true, new: true }
+      { upsert: true, returnDocument: 'after' }
     );
 
     // Update user references
@@ -131,10 +132,6 @@ export async function POST(req: Request) {
       personalityProfileId: profile._id.toString(),
     });
   } catch (error) {
-    console.error('Interview end error:', error);
-    return NextResponse.json(
-      { error: 'Failed to end interview' },
-      { status: 500 }
-    );
+    return createErrorResponse('Something went wrong. Please try again.', 500, error);
   }
 }
